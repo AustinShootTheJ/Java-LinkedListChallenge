@@ -1,6 +1,7 @@
 package com.austinshootthej;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Album {
     private LinkedList<Song> songs = new LinkedList<Song>();
@@ -27,5 +28,11 @@ public class Album {
         System.out.println("---------------\n" + "Cover: " + this.title  + "\n---------------");
     }
 
+    public Song getSong(String title){
+        ListIterator<Song> songListIterator = this.songs.listIterator();
+        while(songListIterator.hasNext()){
+            int comparison = songListIterator.next().getTitle().compareToIgnoreCase(title);
 
+        }
+    }
 }
