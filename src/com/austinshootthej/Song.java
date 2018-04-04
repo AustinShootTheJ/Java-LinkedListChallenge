@@ -11,10 +11,12 @@ public class Song {
     }
 
     public String getTitle() {
+
         return title;
     }
 
-    private String getDuration() {
+    public String getDuration() {
+        System.out.println(this.duration);
         return duration;
     }
 

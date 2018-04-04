@@ -24,15 +24,26 @@ public class Album {
             System.out.println(this.songs.get(i).printSong());
         }
     }
-    public void getTitle(){
-        System.out.println("---------------\n" + "Cover: " + this.title  + "\n---------------");
+    public String getTitle(){
+        return title;
     }
 
     public Song getSong(String title){
         ListIterator<Song> songListIterator = this.songs.listIterator();
         while(songListIterator.hasNext()){
-            int comparison = songListIterator.next().getTitle().compareToIgnoreCase(title);
-
+            Song temSong = songListIterator.next();
+            int comparison = temSong.getTitle().compareToIgnoreCase(title);
+            if(comparison == 0){
+                System.out.println("Song Found! Added to playlist."+ temSong.getTitle());
+                return temSong;
+            }
         }
+        System.out.println("No song found");
+        return null;
     }
-}
+
+
+
+    }
+
+
