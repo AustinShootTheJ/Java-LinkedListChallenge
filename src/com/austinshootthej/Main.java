@@ -28,11 +28,8 @@ public class Main {
     albumLinkedList.add(rapAlbum);
 
 
-    //addSongs(playList,findAlbum("Gamer Album",albumLinkedList),"GGEZ NO RE!");
-    //addSongs(playList,gamerAlbum,"EXTRA THICC");
-
         playSongs(playList,albumLinkedList);
-        printList(playList);
+
 
 
 
@@ -72,6 +69,7 @@ public class Main {
                     String songAnswer = scanner.nextLine();
                     if(addSongs(playList,findAlbum(albumAnswer,albumLinkedList),songAnswer)== null){
                         System.out.println("Song not found!");
+                        printMenu();
                         break;
                     }else{
                         int count = 0;
@@ -84,7 +82,7 @@ public class Main {
                         i.add(addSongs(playList,findAlbum(albumAnswer,albumLinkedList),songAnswer));
                         System.out.println("Song Found! Added to playlist.");
                         if(i.hasPrevious()){
-                            for(int b = count; b>0; b--){
+                            for(int b = count; b>-1; b--){
                                 i.previous();
                             }
                         }
@@ -161,14 +159,40 @@ public class Main {
 
 
                 case 5:
+
                     System.out.println("What song do you want to remove?");
                     String songToRemove = scanner.nextLine();
-                    playList.remove(removeSongs(playList,songToRemove));
-                    printMenu();
-                    break;
+                    boolean didRemove = false;
+                    if(i.hasPrevious()){
+                        while(i.hasPrevious()){
+                        i.previous();
+                        }
+                    }
+                    while (i.hasNext()){
+                        Song tempSong = i.next();
+                        String comparison = tempSong.getTitle();
+                        if(comparison.equalsIgnoreCase(songToRemove)){
+
+                            i.remove();
+                            System.out.println("Song: " + songToRemove + " removed!" );
+                            didRemove = true;
+
+                        }
+                    }
+                        if(didRemove == false) {
+                            System.out.println("Song not found!");
+                        }
+                        printMenu();
+                        break;
+
+
+
+
+
+
 
                 case 6:
-                    printMenu();
+                    printList(playList);
                     break;
 
                     default:
@@ -233,11 +257,11 @@ public class Main {
             Song tempSong = songListIterator.next();
             String comparison = tempSong.getTitle();
             if(comparison.equalsIgnoreCase(title)){
-                System.out.println(comparison + " has been removed from the playlist.");
+
                 return tempSong;
             }
         }
-        System.out.println("That song is not on the playlist!");
+
         return null;
 
 
@@ -268,7 +292,7 @@ public class Main {
                 "3 - play previous song\n" +
                 "4 - repeat song\n" +
                 "5 - remove song \n" +
-                "6 - print menu options");
+                "6 - print playlist");
     }
 
 
