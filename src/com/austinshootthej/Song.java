@@ -21,6 +21,6 @@ public class Song {
     }
 
 public String printSong(){
-    return "Title: " + this.title + "\n" + "Duration:" + this.duration;
+    return "\nTitle: " + this.title + "\n" + "Duration:" + this.duration;
 }
 }

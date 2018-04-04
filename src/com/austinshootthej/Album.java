@@ -34,11 +34,11 @@ public class Album {
             Song temSong = songListIterator.next();
             int comparison = temSong.getTitle().compareToIgnoreCase(title);
             if(comparison == 0){
-                System.out.println("Song Found! Added to playlist."+ temSong.getTitle());
+                //System.out.println("Song Found! Added to playlist."+ temSong.getTitle());
                 return temSong;
             }
         }
-        System.out.println("No song found");
+
         return null;
     }
 

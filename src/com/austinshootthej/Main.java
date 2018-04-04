@@ -44,6 +44,7 @@ public class Main {
         ListIterator<Song> i = playList.listIterator();
         boolean quit = false;
         boolean goingForward = true;
+        boolean firstPlay = true;
 
 
         if (playList.isEmpty()) {
@@ -57,6 +58,7 @@ public class Main {
        while(!quit){
             int action = scanner.nextInt();
             scanner.nextLine();
+
             switch(action){
                 case 0:
                     System.out.println("Now leaving playlist");
@@ -68,14 +70,40 @@ public class Main {
                     String albumAnswer = scanner.nextLine();
                     System.out.println("What song do you want to add?");
                     String songAnswer = scanner.nextLine();
+                    if(addSongs(playList,findAlbum(albumAnswer,albumLinkedList),songAnswer)== null){
+                        System.out.println("Song not found!");
+                        break;
+                    }else{
+                        int count = 0;
+                        if(i.hasNext()){
+                            while(i.hasNext()){
+                                i.next();
+                                count++;
+                            }
+                        }
+                        i.add(addSongs(playList,findAlbum(albumAnswer,albumLinkedList),songAnswer));
+                        System.out.println("Song Found! Added to playlist.");
+                        if(i.hasPrevious()){
+                            for(int b = count; b>0; b--){
+                                i.previous();
+                            }
+                        }
+                    }
 
-                    i.add(addSongs(playList,findAlbum(albumAnswer,albumLinkedList),songAnswer));
+                    printMenu();
                     break;
 
 
 
 
                 case 2:
+                if(firstPlay == true){
+                    while(i.hasPrevious()){
+                        i.previous();
+
+                    }
+                    firstPlay = false;
+                }
                     if(!goingForward){
                         if(i.hasNext()){
                             i.next();
@@ -86,19 +114,67 @@ public class Main {
                         System.out.println("Now Playing: "+ i.next().printSong());
 
                     }else{
-                        System.out.println("Reached the end of the Playlist");
-                        goingForward = false;
+                        System.out.println("Reached the end of the Playlist. Starting over! \n");
+
+                        if(i.hasPrevious()){
+                            while(i.hasPrevious()){
+                                i.previous();
+                            }
+
+                        }
+                        System.out.println("Now Playing: " + i.next().printSong());
+                        goingForward = true;
                     }
+                    printMenu();
                     break;
 
+                case 3:
+                    if(goingForward){
+                        if(i.hasPrevious()){
+                            i.previous();
+                        }
+
+                        }goingForward = false;
+                    if(i.hasPrevious()){
+                        System.out.println("Now playing: " + i.previous().printSong());
+                    }else{
+                        System.out.println("Now playing: "+ playList.getFirst().printSong());
+                    }
+                    printMenu();
+                    break;
 
 
                 case 4:
-                    System.out.println("What song do you want to remove?");
-
-
-                    i.add(addSongs(playList,findAlbum(albumAnswer,albumLinkedList),songAnswer));
+                    if(!goingForward){
+                        if(i.hasNext()){
+                            i.next();
+                            i.previous();
+                            System.out.println("Now Playing: "+ i.next().printSong());
+                        }
+                        goingForward = true;
+                    }else if(i.hasPrevious()){
+                        i.previous();
+                        System.out.println("Now Playing: " + i.next().printSong());
+                    }
+                    printMenu();
                     break;
+
+
+                case 5:
+                    System.out.println("What song do you want to remove?");
+                    String songToRemove = scanner.nextLine();
+                    playList.remove(removeSongs(playList,songToRemove));
+                    printMenu();
+                    break;
+
+                case 6:
+                    printMenu();
+                    break;
+
+                    default:
+                        System.out.println("Not a valid option");
+                        printMenu();
+                        break;
 
 
 
@@ -122,7 +198,7 @@ public class Main {
 
         }else {
             return checkSong;
-            //playList.add(checkSong);
+
 
         }
         return null;
@@ -137,7 +213,7 @@ public class Main {
             Album tempAlbum = albumListIterator.next();
             int comparison = tempAlbum.getTitle().compareToIgnoreCase(title);
             if(comparison == 0){
-                System.out.println("Album Found!"+ tempAlbum.getTitle());
+                //System.out.println("Album Found!"+ tempAlbum.getTitle());
                 return tempAlbum;
             }
         }
@@ -152,16 +228,18 @@ public class Main {
 
 
         // here is where we stopped make a method to remove from the list ***
-        Song checkSong = album.getSong(title);
-
-        if(checkSong == null ){
-
-        }else {
-            return checkSong;
-            //playList.add(checkSong);
-
+        ListIterator<Song> songListIterator = playList.listIterator();
+        while (songListIterator.hasNext()){
+            Song tempSong = songListIterator.next();
+            String comparison = tempSong.getTitle();
+            if(comparison.equalsIgnoreCase(title)){
+                System.out.println(comparison + " has been removed from the playlist.");
+                return tempSong;
+            }
         }
+        System.out.println("That song is not on the playlist!");
         return null;
+
 
     }
 
@@ -187,8 +265,10 @@ public class Main {
         System.out.println("0 - to quit\n" +
                 "1 - add song\n" +
                 "2 - play next song\n" +
-                "3 - print menu options\n" +
-                "4 - remove song");
+                "3 - play previous song\n" +
+                "4 - repeat song\n" +
+                "5 - remove song \n" +
+                "6 - print menu options");
     }
 
 
